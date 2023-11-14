@@ -107,37 +107,43 @@ function UsernameForm() {
     const onRoleChange = (e) => {
         setRoleValue(e.target.value);
     }
-
+    
     return (
         !username && (
-            <section>
-                <h3>Choose a username</h3>
-                <form onSubmit={onSubmit}>
-                    
-                    <input name="username" placeholder="username" value={formValue} onChange={onChange} />
-                    
-                    <div>
-                        <input type="radio" id="student" name="role" value="student" checked={roleValue === 'student'} onChange={onRoleChange} />
-                        <label for="student">Student</label><br/>
-                        <input type="radio" id="teacher" name="role" value="teacher" checked={roleValue === 'teacher'} onChange={onRoleChange}/>
-                        <label for="teacher">Teacher</label><br/>
+            <section className="d-flex justify-content-center align-items-center vh-100">
+                <div className="card" style={{width: "24rem"}}>
+                    <div className="card-body">
+                        <h3 className="card-title mb-3">Choose a username</h3>
+                        <form onSubmit={onSubmit} className="d-flex flex-column">
+                            <div className="form-group">
+                                <label className="mb-3 h5" htmlFor="username">Username</label>
+                                <input type="text" className="form-control" id="username" placeholder="username" value={formValue} onChange={onChange} />
+                            </div>
+                            <div className="form-group mt-3">
+                                <div className="btn-group btn-group-toggle" data-bs-toggle="buttons">
+                                    <label className={`btn btn-secondary ${roleValue === 'student' ? 'active' : ''}`} htmlFor="student">
+                                        <input type="radio" name="role" id="student" value="student" className="btn-check" autoComplete="off" checked={role === 'student'} onChange={onRoleChange} />
+                                        Student
+                                    </label>
+                                    <label className={`btn btn-secondary ${roleValue === 'teacher' ? 'active' : ''}`} htmlFor="teacher">
+                                        <input type="radio" name="role" id="teacher" value="teacher" className="btn-check" autoComplete="off" checked={role === 'teacher'} onChange={onRoleChange} />
+                                        Teacher
+                                    </label>
+                                </div>
+                            </div>
+                            <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
+                            <button type="submit" className="btn btn-primary mt-3" disabled={!isValid}>
+                                Choose
+                            </button>
+                            <h3 className="mt-3">Debug State</h3>
+                            <div>
+                                <p>Username: {formValue}</p>
+                                <p>Loading: {loading.toString()}</p>
+                                <p>Username Valid: {isValid.toString()}</p>
+                            </div>
+                        </form>
                     </div>
-
-                    <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
-                     
-                    <button type="submit" className="btn btn-outline-success" disabled={!isValid}>
-                        Choose
-                    </button>
-
-                    <h3>Debug State</h3>
-                    <div>
-                        Username: {formValue}
-                        <br />
-                        Loading: {loading.toString()}
-                        <br />
-                        Username Valid: {isValid.toString()}
-                    </div>
-                </form>
+                </div>
             </section>
         )
     );
