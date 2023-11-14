@@ -45,10 +45,11 @@ function SignOutButton() {
 // Username form
 function UsernameForm() {
     const [formValue, setFormValue] = useState('');
+    const [roleValue, setRoleValue] = useState('student');
     const [isValid, setIsValid] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const { user, username } = useContext(UserContext);
+    const { user, username, role } = useContext(UserContext);
 
     useEffect(() => {
         checkUsername(formValue);
@@ -64,6 +65,7 @@ function UsernameForm() {
         // Commit both docs together as a batch write.
         const batch = firestore.batch();
         batch.set(userDoc, { username: formValue,
+                             role: roleValue,
                              photoURL: user.photoURL,
                              displayName: user.displayName, 
                              email: user.email });
@@ -102,6 +104,10 @@ function UsernameForm() {
         []
     );
 
+    const onRoleChange = (e) => {
+        setRoleValue(e.target.value);
+    }
+
     return (
         !username && (
             <section>
@@ -110,6 +116,13 @@ function UsernameForm() {
                     
                     <input name="username" placeholder="username" value={formValue} onChange={onChange} />
                     
+                    <div>
+                        <input type="radio" id="student" name="role" value="student" checked={roleValue === 'student'} onChange={onRoleChange} />
+                        <label for="student">Student</label><br/>
+                        <input type="radio" id="teacher" name="role" value="teacher" checked={roleValue === 'teacher'} onChange={onRoleChange}/>
+                        <label for="teacher">Teacher</label><br/>
+                    </div>
+
                     <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
                      
                     <button type="submit" className="btn btn-outline-success" disabled={!isValid}>

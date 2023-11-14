@@ -4,7 +4,7 @@ import Link from 'next/link';
 import  { auth } from '@/lib/firebase';
 
 export default function Navbar() {
-  const { user, username } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
