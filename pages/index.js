@@ -1,14 +1,11 @@
+import { UserContext } from "@/lib/context";
+import { useContext } from 'react';
+
 export default function Home() {
+    const { user, username } = useContext(UserContext);
     return (
         <main>
-            <h1>Home</h1>
-            <p>This is the home page.</p>
-            <p>
-                <a href="/about">About</a>
-            </p>
-            <p>
-                <a href="/contact">Contact</a>
-            </p>
+            {user ? <h1>{user.displayName}</h1> : <h1>oops</h1>}
         </main>
     );
 }
