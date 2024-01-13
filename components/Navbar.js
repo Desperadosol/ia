@@ -1,10 +1,21 @@
 import { UserContext } from "@/lib/context";
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Link from 'next/link';
 import  { auth } from '@/lib/firebase';
 
 export default function Navbar() {
   const { user } = useContext(UserContext);
+  const [theme, setTheme] = useState("dark");
+
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+      document.documentElement.setAttribute("data-bs-theme", "dark");
+    } else {
+      setTheme("light");
+      document.documentElement.setAttribute("data-bs-theme", "light");
+    }
+  };
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -72,6 +83,14 @@ export default function Navbar() {
               </a>
             </li>
           </ul>
+          <div className="me-4">
+            <button class={`btn btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>
+              {theme == 'dark' ? 
+              <img src="moon.png" alt="" width="24" height="24"/> :
+              <img src="sun-512.png" alt="" width="24" height="24"/>
+              }
+            </button>
+          </div>
           <div className="u-flex">
             {user? 
             <SignOutButton /> :

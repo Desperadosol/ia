@@ -13,6 +13,7 @@
     "firebase": "^10.4.0",
     "lodash.debounce": "^4.0.8",
     "next": "latest",
+    "next-themes": "^0.2.1",
     "react": "latest",
     "react-dom": "latest",
     "react-firebase-hooks": "^5.1.1",
