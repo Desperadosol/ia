@@ -5,22 +5,22 @@ import debounce from 'lodash.debounce';
 import AlertCard from '@/components/AlertCard';
 import Link from 'next/link';
 
-export default function Enter(props) {
+export default function Enter({ theme }) {
     const { user, username } = useContext(UserContext);
-
+    
     return (
         <main>
             {user ? 
                 !username ? <UsernameForm /> 
                 : 
-                <AlertCard>
+                <AlertCard theme={theme}>
                     <div className="card-body d-flex flex-column justify-content-center align-items-center">
                         <h2 className="card-title mb-3">You are signed in</h2>
-                        <Link href="/" className="fs-5 link-underline-white link-offset-1" style={{color: "white"}}>Go to the starting page&rarr;</Link>
+                        <Link href="/" className="fs-5 link-underline-white link-offset-1" >Go to the starting page&rarr;</Link>
                     </div>
                 </AlertCard> 
                 : 
-                <AlertCard>
+                <AlertCard theme={theme}>
                     <div className='text-center mb-2'>
                         <h5 className="card-title fs-3">Log in to "Smth"</h5>
                     </div>
@@ -48,10 +48,6 @@ function SignInButton() {
     );
 }
 
-//sign-out button
-function SignOutButton() {
-    return <button className="btn btn-outline-danger" onClick={() => auth.signOut()}>Sign Out</button>
-}
 
 // Username form
 function UsernameForm() {
