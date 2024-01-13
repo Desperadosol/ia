@@ -2,7 +2,8 @@ import { auth, firestore, googleAuthProvider } from '../lib/firebase';
 import { useEffect, useState, useCallback, useContext } from 'react';
 import { UserContext } from "@/lib/context";
 import debounce from 'lodash.debounce';
-import SignUpCard from '@/components/SignUpCard';
+import AlertCard from '@/components/AlertCard';
+import Link from 'next/link';
 
 export default function Enter(props) {
     const { user, username } = useContext(UserContext);
@@ -10,11 +11,21 @@ export default function Enter(props) {
     return (
         <main>
             {user ? 
-                !username ? <UsernameForm /> : <SignOutButton /> 
+                !username ? <UsernameForm /> 
                 : 
-                <SignUpCard>
+                <AlertCard>
+                    <div className="card-body d-flex flex-column justify-content-center align-items-center">
+                        <h2 className="card-title mb-3">You are signed in</h2>
+                        <Link href="/" className="fs-5 link-underline-white link-offset-1" style={{color: "white"}}>Go to the starting page&rarr;</Link>
+                    </div>
+                </AlertCard> 
+                : 
+                <AlertCard>
+                    <div className='text-center mb-2'>
+                        <h5 className="card-title fs-3">Log in to "Smth"</h5>
+                    </div>
                     <SignInButton />
-                </SignUpCard>
+                </AlertCard>
             }
         </main>
     );
@@ -24,15 +35,15 @@ export default function Enter(props) {
 //sign in with google button
 function SignInButton() {
     const signInWithGoogle = async () => {
-        await auth.signInWithPopup(googleAuthProvider);
+        await auth.signInWithPopup(googleAuthProvider); 
     };
 
     return (
-        <div className='mt-3 d-flex align-items-center'>
-          <button className='btn btn-outline-primary d-flex align-items-center' onClick={signInWithGoogle}>
-            Sign in with Google
+        <div className='mt-3 d-flex align-items-center justify-content-center'>
+          <button className='btn btn-outline-light d-flex align-items-center' onClick={signInWithGoogle}>
+            Continue with Google
+            <img src='/google.png' alt="Google" style={{ maxWidth: '32px', maxHeight: '32px', marginLeft: "4px"}} />
           </button>
-          <img src='/google.png' alt="Google" style={{ maxWidth: '32px', maxHeight: '32px' }} />
         </div>
     );
 }

@@ -84,7 +84,7 @@ export default function Navbar() {
             </li>
           </ul>
           <div className="me-4">
-            <button class={`btn btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>
+            <button className={`btn btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>
               {theme == 'dark' ? 
               <img src="moon.png" alt="" width="24" height="24"/> :
               <img src="sun-512.png" alt="" width="24" height="24"/>
@@ -93,18 +93,29 @@ export default function Navbar() {
           </div>
           <div className="u-flex">
             {user? 
-            <SignOutButton /> :
+            <SignOutButton theme={theme}/> :
             <Link href="/enter">
-              <button className="btn btn-outline-success">Log in</button>
+              <button className="btn fw-semibold log-in-btn">Log in</button>
             </Link>
             }
           </div>
         </div>
       </div>
+      <style jsx>{`
+            .log-in-btn {
+                color: var(--primary);
+                border: 2px solid var(--primary);
+            }
+
+            .log-in-btn:hover {
+                color: white;
+                background-color: var(--primary);
+            }
+      `}</style>
     </nav>
   );
 };
 
-function SignOutButton() {
-  return <button className="btn btn-outline-danger" onClick={() => auth.signOut()}>Sign Out</button>
+function SignOutButton({ theme }) {
+  return <button className={`btn btn-outline-${theme == "dark" ? "light" : "dark"}`} onClick={() => auth.signOut()}>Sign Out</button>
 }
