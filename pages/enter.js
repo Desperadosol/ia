@@ -1,9 +1,11 @@
-import { auth, firestore, googleAuthProvider } from '../lib/firebase';
 import { useEffect, useState, useCallback, useContext } from 'react';
-import { UserContext } from "@/lib/context";
 import debounce from 'lodash.debounce';
-import AlertCard from '@/components/AlertCard';
 import Link from 'next/link';
+
+import { auth, firestore, googleAuthProvider } from '../lib/firebase';
+import { UserContext } from "@/lib/context";
+
+import AlertCard from '@/components/AlertCard';
 
 export default function Enter({ theme }) {
     const { user, username } = useContext(UserContext);

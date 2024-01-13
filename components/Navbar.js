@@ -4,7 +4,7 @@ import Link from 'next/link';
 import  { auth } from '@/lib/firebase';
 
 export default function Navbar({ theme, setTheme }) {
-  const { user } = useContext(UserContext);
+  const { user, role } = useContext(UserContext);
   
 
   const toggleTheme = () => {
@@ -37,30 +37,33 @@ export default function Navbar({ theme, setTheme }) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/">
+              <a className="nav-link active hover-undrln" aria-current="page" href="/">
                 Home
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" href="/contact">
+              <a className="nav-link active hover-undrln" href="/contact">
                 Contact
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link active" href="/about">
+              <a className="nav-link active hover-undrln" href="/about">
                 About
               </a>
             </li>
+            {role === 'admin' && (
+              <li className="nav-item">
+                  <a className="nav-link active hover-undrln" href="/admin">Admin</a>
+              </li>
+            )}
           </ul>
           <div className="me-4">
-            <button className={`btn btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>
+            <button className={`btn me-3 btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>
               {theme == 'dark' ? 
               <img src="moon.png" alt="" width="24" height="24"/> :
               <img src="sun-512.png" alt="" width="24" height="24"/>
               }
             </button>
-          </div>
-          <div className="u-flex">
             {user? 
             <SignOutButton theme={theme}/> :
             <Link href="/enter">
@@ -79,6 +82,12 @@ export default function Navbar({ theme, setTheme }) {
             .log-in-btn:hover {
                 color: white;
                 background-color: var(--primary);
+            }
+            
+            .hover-undrln:hover {
+                text-decoration: underline;
+                text-decoration-thickness: 2px;
+                text-underline-offset: 3px;
             }
       `}</style>
     </nav>
