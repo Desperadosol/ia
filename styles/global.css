@@ -8,3 +8,10 @@ body {
   margin: 0;
   overflow-x: hidden;
 }
+
+
+
+.vertical-line-sm {
+  border-left: 1px solid white;
+  height: 0.8rem; /* Adjust the height as needed */
+}
