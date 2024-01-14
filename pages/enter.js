@@ -57,6 +57,7 @@ function UsernameForm() {
     const [roleValue, setRoleValue] = useState('student');
     const [isValid, setIsValid] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [teacherPassword, setTeacherPassword] = useState('');
 
     const { user, username, role } = useContext(UserContext);
 
@@ -116,10 +117,19 @@ function UsernameForm() {
     const onRoleChange = (e) => {
         setRoleValue(e.target.value);
     }
+
+    const handleTeacherPasswordChange = (event) => {
+        setTeacherPassword(event.target.value);
+    };
+
+    const isTeacherPasswordCorrect = () => {
+        
+        return teacherPassword === 'teacher69';
+    };
     
     return (
         !username && (
-            <section className="d-flex justify-content-center align-items-center vh-100">
+            <section className="d-flex justify-content-center align-items-center vh-100" style={{backgroundColor: "var(--primary)"}}>
                 <div className="card" style={{width: "24rem"}}>
                     <div className="card-body">
                         <h3 className="card-title mb-3">Choose a username</h3>
@@ -128,7 +138,8 @@ function UsernameForm() {
                                 <label className="mb-3 h5" htmlFor="username">Username</label>
                                 <input type="text" className="form-control" id="username" placeholder="username" value={formValue} onChange={onChange} />
                             </div>
-                            <div className="form-group mt-3">
+                            <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
+                            <div className="form-group">
                                 <div className="btn-group btn-group-toggle" data-bs-toggle="buttons">
                                     <label className={`btn btn-secondary ${roleValue === 'student' ? 'active' : ''}`} htmlFor="student">
                                         <input type="radio" name="role" id="student" value="student" className="btn-check" autoComplete="off" checked={role === 'student'} onChange={onRoleChange} />
@@ -140,16 +151,16 @@ function UsernameForm() {
                                     </label>
                                 </div>
                             </div>
-                            <UsernameMessage username={formValue} isValid={isValid} loading={loading} />
-                            <button type="submit" className="btn btn-primary mt-3" disabled={!isValid}>
-                                Choose
+                            {roleValue === 'teacher' && (
+                              <div className="form-group mt-3">
+                                <label className="mb-3 h5" htmlFor="teacherPassword">Teacher Password</label>
+                                <input type="password" className="form-control" id="teacherPassword" placeholder="Password" value={teacherPassword} onChange={handleTeacherPasswordChange} />
+                              </div>
+                            )}
+                            
+                            <button type="submit" className="btn btn-primary mt-3" disabled={!isValid || (roleValue === 'teacher' && !isTeacherPasswordCorrect())}>
+                              Choose
                             </button>
-                            <h3 className="mt-3">Debug State</h3>
-                            <div>
-                                <p>Username: {formValue}</p>
-                                <p>Loading: {loading.toString()}</p>
-                                <p>Username Valid: {isValid.toString()}</p>
-                            </div>
                         </form>
                     </div>
                 </div>
