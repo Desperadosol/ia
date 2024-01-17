@@ -1,3 +1,8 @@
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import bootstrap5Plugin from "@fullcalendar/bootstrap5";
+import { addWeeks, startOfWeek, endOfWeek } from "date-fns";
+
 import React, { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -28,7 +33,16 @@ const Calendar = ({ events, theme }) => {
   return (
     <div className={styles.calendarContainer}>
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        navLinks={true}
+        fixedWeekCount={false}
+        aspectRatio={1}
+        themeSystem="bootstrap5"
+        headerToolbar={{
+          left: "title",
+          center: "",
+          right: "today,dayGridMonth,prev,next",
+        }}
+        plugins={[dayGridPlugin, bootstrap5Plugin]}
         initialView="dayGridMonth"
         events={events}
         eventClick={handleEventClick}
@@ -36,11 +50,7 @@ const Calendar = ({ events, theme }) => {
         eventMouseLeave={handleEventMouseLeave}
         eventContent={(eventInfo) => (
           <>
-            <div
-              className={`${styles.customEvent} ${
-                eventInfo.event === hoveredEvent ? styles.hoveredEvent : ""
-              }`}
-            >
+            <div className={styles.customEvent}>
               {eventInfo.event.start.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -52,19 +62,8 @@ const Calendar = ({ events, theme }) => {
               })}
               <br />
               {eventInfo.event.title}
+              
             </div>
-            {hoveredEvent && hoveredEvent.title == eventInfo.event.title && (
-              <div
-                className={`${styles.hoveredEventInfo} bg-${theme} text-${
-                  theme == "dark" ? "white" : "black"
-                }`}
-                style={{ border: "1px solid var(--primary)" }}
-              >
-                <strong>{hoveredEvent.title}</strong>
-                <br />
-                Something else here
-              </div>
-            )}
           </>
         )}
       />

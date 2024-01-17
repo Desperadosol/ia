@@ -1,28 +1,25 @@
 import React from 'react';
 import Calendar from '@/components/Calendar';
+import { getEvents } from '@/lib/firestore_interface';
+import EventForm from '@/components/EventForm';
 
-const CalendarPage = ({ theme }) => {
-  // Fetch or provide events data as needed
-  const events = [
-    {
-      title: 'Business and Management',
-      start: '2024-01-15T10:00:00',
-      end: '2024-01-15T13:00:00',
+export async function getServerSideProps() {
+  const events = await getEvents();
+  return {
+    props: {
+      events,
     },
-    {
-      title: 'Mathematics',
-      start: '2024-01-15T09:00:00',
-      end: '2024-01-15T13:00:00',
-    },
-    // Add more events as needed
-  ];
+  };
+}
 
+export default function CalendarPage({ events, theme }) {
   return (
     <div>
-      <h1>Class Calendar</h1>
+      <h1>Calendar</h1>
+      <EventForm />
       <Calendar events={events} theme={theme}/>
     </div>
   );
 };
 
-export default CalendarPage;
+
