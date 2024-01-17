@@ -36,7 +36,7 @@ export default function CalendarPage({ events, theme }) {
               <Modal.Title>Add Lesson</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <EventForm />
+              <EventForm handleClose={handleClose}/>
             </Modal.Body>
           </Modal>
         </>

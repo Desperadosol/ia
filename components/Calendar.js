@@ -4,30 +4,19 @@ import bootstrap5Plugin from "@fullcalendar/bootstrap5";
 import { addWeeks, startOfWeek, endOfWeek } from "date-fns";
 
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import styles from "@/styles/Calendar.module.css"; // Import your CSS module
 
 const Calendar = ({ events, theme }) => {
-  const [hoveredEvent, setHoveredEvent] = useState(null);
+  const router = useRouter();
 
   const handleEventClick = (eventInfo) => {
     // Access the event information here
     const eventId = eventInfo.event.id;
 
-    // Define the behavior (e.g., redirect to event details page)
-    window.location.href = `/event/${eventId}`;
-  };
-
-  const handleEventMouseEnter = (eventInfo) => {
-    // Set the hovered event when the mouse enters an event
-    setHoveredEvent(eventInfo.event);
-    console.log(eventInfo.event);
-  };
-
-  const handleEventMouseLeave = () => {
-    // Clear the hovered event when the mouse leaves an event
-    setHoveredEvent(null);
+   router.push(`/${eventId}`);
   };
 
   return (
@@ -46,8 +35,6 @@ const Calendar = ({ events, theme }) => {
         initialView="dayGridMonth"
         events={events}
         eventClick={handleEventClick}
-        eventMouseEnter={handleEventMouseEnter}
-        eventMouseLeave={handleEventMouseLeave}
         eventContent={(eventInfo) => (
           <>
             <div className={styles.customEvent}>
