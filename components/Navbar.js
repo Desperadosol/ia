@@ -51,6 +51,11 @@ export default function Navbar({ theme, setTheme }) {
                 About
               </a>
             </li>
+            <li className="nav-item">
+              <a className="nav-link active hover-undrln" href="/calendar">
+                Calendar
+              </a>
+            </li>
             {role === 'admin' && (
               <li className="nav-item">
                   <a className="nav-link active hover-undrln" href="/admin">Admin</a>
