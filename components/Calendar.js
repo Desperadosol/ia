@@ -35,7 +35,7 @@ const Calendar = ({ events, theme }) => {
       <FullCalendar
         navLinks={true}
         fixedWeekCount={false}
-        aspectRatio={1}
+        aspectRatio={1.2}
         themeSystem="bootstrap5"
         headerToolbar={{
           left: "title",
