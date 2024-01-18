@@ -83,6 +83,7 @@ export default function EventPage({ eventData, userData }) {
           <button className="btn btn-success btn-lg" onClick={handleApply}>Apply for the lesson</button>
         </div>
       ) : null}
+      {/* Here I can put the filesharing, if the user is in the list students */}
     </div>
   );
 }

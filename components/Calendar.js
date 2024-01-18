@@ -11,16 +11,27 @@ import styles from "@/styles/Calendar.module.css"; // Import your CSS module
 
 const Calendar = ({ events, theme }) => {
   const router = useRouter();
+  const [selectedSubject, setSelectedSubject] = useState('All');
 
   const handleEventClick = (eventInfo) => {
-    // Access the event information here
     const eventId = eventInfo.event.id;
-
    router.push(`/events/${eventId}`);
   };
 
+  const filteredEvents = selectedSubject === 'All'
+    ? events
+    : events.filter(event => event.subject === selectedSubject);
+  
   return (
     <div className={styles.calendarContainer}>
+      <div className="form-group mb-5" style={{maxWidth: "600px"}}>
+        <label htmlFor="subjectSelect">Filter by subject:</label>
+        <select className="form-control" id="subjectSelect" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
+          <option value="All">All</option>
+          <option value="Math">Math</option>
+          {/* Add more options for other subjects here */}
+        </select>
+      </div> {/* Here I can add filter by Teacher just next to the filter by subject */}
       <FullCalendar
         navLinks={true}
         fixedWeekCount={false}
@@ -33,7 +44,7 @@ const Calendar = ({ events, theme }) => {
         }}
         plugins={[dayGridPlugin, bootstrap5Plugin]}
         initialView="dayGridMonth"
-        events={events}
+        events={filteredEvents}
         eventClick={handleEventClick}
         eventContent={(eventInfo) => (
           <>
