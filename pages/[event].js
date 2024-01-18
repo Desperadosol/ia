@@ -1,20 +1,20 @@
-import { getEvent } from '@/lib/firestore_interface';
+import { getEvent } from "@/lib/firestore_interface";
 
 export async function getServerSideProps({ query }) {
-    
-    const eventData = await getEvent(query.event);
-    return {
-        props: {
-            eventData: eventData
-        }
-    };
+  const event = await getEvent(query.event);
+
+  return {
+    props: {
+      eventData: event,
+    },
+  };
 }
 export default function EventPage({ eventData }) {
-    return (
-        <div>
-            <h1>{eventData.title}</h1>
-            
-            {/* Display other event data here */}
-        </div>
-    );
+  return (
+    <div>
+      <h1>{eventData.title}</h1>
+
+      {/* Display other event data here */}
+    </div>
+  );
 }

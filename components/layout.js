@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import { useState, cloneElement } from "react";
+import React, { useState, cloneElement } from "react";
 
 export default function Layout({ children }) {
     const [theme, setTheme] = useState("dark");
