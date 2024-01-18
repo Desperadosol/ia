@@ -49,7 +49,6 @@ const Calendar = ({ events, theme }) => {
               })}
               <br />
               {eventInfo.event.title}
-              
             </div>
           </>
         )}

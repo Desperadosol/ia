@@ -37,7 +37,7 @@ export default function Enter({ theme }) {
           <div className="text-center mb-2">
             <h5 className="card-title fs-3">Log in to "Smth"</h5>
           </div>
-          <SignInButton />
+          <SignInButton theme={theme}/>
         </AlertCard>
       )}
     </main>
@@ -45,7 +45,7 @@ export default function Enter({ theme }) {
 }
 
 //sign in with google button
-function SignInButton() {
+function SignInButton({ theme }) {
   const signInWithGoogle = async () => {
     await auth.signInWithPopup(googleAuthProvider);
   };
@@ -53,7 +53,7 @@ function SignInButton() {
   return (
     <div className="mt-3 d-flex align-items-center justify-content-center">
       <button
-        className="btn btn-outline-light d-flex align-items-center"
+        className={`btn btn-outline-${theme == "dark" ? "light" : "dark"} d-flex align-items-center`}
         onClick={signInWithGoogle}
       >
         Continue with Google
