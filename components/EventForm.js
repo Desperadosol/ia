@@ -4,26 +4,35 @@ import { UserContext } from "@/lib/context";
 
 function EventForm({ handleClose }) {
   const { user, role } = useContext(UserContext);
+
   const [title, setTitle] = useState('');
+  const [subject, setSubject] = useState('');
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [price, setPrice] = useState('');
+  const [minStudents, setMinStudents] = useState(1);
+  const [maxStudents, setMaxStudents] = useState(1);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const event = { 
-      title, 
+      title,
+      subject,
       start: `${date}T${startTime}:00`, 
       end: `${date}T${endTime}:00` ,
       price,
+      minStudents,
+      maxStudents,
       techerId: user.uid
     };
     await addEvent(event);
     setTitle('');
+    setSubject('');
     setDate('');
     setStartTime('');
     setEndTime('');
+    setPrice('');
     handleClose();
   };
 
@@ -32,6 +41,16 @@ function EventForm({ handleClose }) {
       <div className="mb-3 mx-3">
         <label htmlFor="title" className="form-label">Title of the Lesson:</label>
         <input type="text" id="title" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
+      </div>
+      <div className="mb-3 mx-3">
+        <label htmlFor="subject" className="form-label">Subject:</label>
+        <select id="subject" className="form-control" value={subject} onChange={(e) => setSubject(e.target.value)} required>
+          <option value="">Select a subject</option>
+          <option value="Math">Math</option>
+          <option value="English">English</option>
+          <option value="Science">Science</option>
+          // Add more options as needed
+        </select>
       </div>
       <div className="mb-3 mx-3">
         <label htmlFor="date" className="form-label">Date:</label>
@@ -46,7 +65,15 @@ function EventForm({ handleClose }) {
         <input type="time" id="endTime" className="form-control" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
       </div>
       <div className="mb-3 mx-3">
-        <label htmlFor="price" className="form-label">Price:</label>
+        <label htmlFor="minStudents" className="form-label">Min Students:</label>
+        <input type="number" id="minStudents" className="form-control" min="1" value={minStudents} onChange={(e) => setMinStudents(e.target.value)} required />
+      </div>
+      <div className="mb-3 mx-3">
+        <label htmlFor="maxStudents" className="form-label">Max Students:</label>
+        <input type="number" id="maxStudents" className="form-control" min="1" value={maxStudents} onChange={(e) => setMaxStudents(e.target.value)} required />
+      </div>
+      <div className="mb-3 mx-3">
+        <label htmlFor="price" className="form-label">Price (USD):</label>
         <input type="number" id="price" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} required />
       </div>
       <div className='w-100 text-center'>
