@@ -25,6 +25,11 @@ export default function EventPage({ eventData, userData }) {
       return;
     }
 
+    if (eventData.students && eventData.students.length >= eventData.maxStudents) {
+      alert('This event is already full.');
+      return;
+    }
+
     await updateEvent(eventData.id, { students: [...(eventData.students || []), user.uid] });
     alert('You have successfully applied for this event.');
   }

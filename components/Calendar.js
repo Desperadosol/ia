@@ -16,7 +16,7 @@ const Calendar = ({ events, theme }) => {
     // Access the event information here
     const eventId = eventInfo.event.id;
 
-   router.push(`/${eventId}`);
+   router.push(`/events/${eventId}`);
   };
 
   return (
