@@ -1,6 +1,8 @@
 import { getEvent } from "@/lib/firestore_interface";
 import { getUser } from "@/lib/firestore_interface";
-import { Container, Card, ListGroup } from "react-bootstrap";
+import { useContext } from "react";
+import { UserContext } from "@/lib/context";
+import { updateEvent } from "@/lib/firestore_interface";
 
 export async function getServerSideProps({ query }) {
   const event = await getEvent(query.event);
@@ -15,6 +17,18 @@ export async function getServerSideProps({ query }) {
 }
 
 export default function EventPage({ eventData, userData }) {
+  const { user, role } = useContext(UserContext);
+
+  async function handleApply() {
+    if (eventData.students && eventData.students.includes(user.uid)) {
+      alert('You have already applied for this event.');
+      return;
+    }
+
+    await updateEvent(eventData.id, { students: [...(eventData.students || []), user.uid] });
+    alert('You have successfully applied for this event.');
+  }
+
   return (
     <div className="container mt-5">
       <div className="card">
@@ -59,6 +73,11 @@ export default function EventPage({ eventData, userData }) {
           <p className="card-text">E-mail: {userData.email}</p>
         </div>
       </div>
+      { role == "student" ? (
+        <div className="text-center mt-5">
+          <button className="btn btn-success btn-lg" onClick={handleApply}>Apply for the lesson</button>
+        </div>
+      ) : null}
     </div>
   );
 }
