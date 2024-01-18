@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { addEvent } from '@/lib/firestore_interface';
 import { UserContext } from "@/lib/context";
+import { addMinutes } from '@/lib/utils';
 
 function EventForm({ handleClose }) {
   const { user, role } = useContext(UserContext);
@@ -24,7 +25,8 @@ function EventForm({ handleClose }) {
       price,
       minStudents,
       maxStudents,
-      techerId: user.uid
+      techerId: user.uid,
+      students: [],
     };
     await addEvent(event);
     setTitle('');
@@ -62,7 +64,7 @@ function EventForm({ handleClose }) {
       </div>
       <div className="mb-3 mx-3">
         <label htmlFor="endTime" className="form-label">End Time:</label>
-        <input type="time" id="endTime" className="form-control" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+        <input type="time" id="endTime" className="form-control" value={endTime} min={addMinutes(startTime, 5)} onChange={(e) => setEndTime(e.target.value)} required />
       </div>
       <div className="mb-3 mx-3">
         <label htmlFor="minStudents" className="form-label">Min Students:</label>
