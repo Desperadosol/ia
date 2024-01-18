@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { addEvent } from '@/lib/firestore_interface';
-import { Modal } from 'react-bootstrap';
 
 function EventForm({ handleClose }) {
   const [title, setTitle] = useState('');
