@@ -63,7 +63,7 @@ export default function Navbar({ theme, setTheme }) {
             )}
             {role === 'teacher' && (
               <li className="nav-item">
-                  <a className="nav-link active hover-undrln" href="/teacher">Teacher</a>
+                  <a className="nav-link active hover-undrln" href={`/teacher/${user.uid}`}>Teacher</a>
               </li>
             )}
           </ul>

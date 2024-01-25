@@ -19,9 +19,9 @@ export async function getServerSideProps({ query }) {
 export default function EventPage({ eventData, userData }) {
   const { user, role } = useContext(UserContext);
 
-  async function handleApply() {
+  async function handleJoin() {
     if (eventData.students && eventData.students.includes(user.uid)) {
-      alert('You have already applied for this event.');
+      alert('You have already joined for this event.');
       return;
     }
 
@@ -31,7 +31,7 @@ export default function EventPage({ eventData, userData }) {
     }
 
     await updateEvent(eventData.id, { students: [...(eventData.students || []), user.uid] });
-    alert('You have successfully applied for this event.');
+    alert('You have successfully joined for this event.');
   }
 
   return (
@@ -80,7 +80,7 @@ export default function EventPage({ eventData, userData }) {
       </div>
       { role == "student" ? (
         <div className="text-center mt-5">
-          <button className="btn btn-success btn-lg" onClick={handleApply}>Apply for the lesson</button>
+          <button className="btn btn-success btn-lg" onClick={handleJoin}>Join the lesson</button>
         </div>
       ) : null}
       {/* Here I can put the filesharing, if the user is in the list students */}
