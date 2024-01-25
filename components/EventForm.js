@@ -25,7 +25,7 @@ function EventForm({ handleClose }) {
       price,
       minStudents,
       maxStudents,
-      teacherId: user.uid,
+      teacherID: user.uid,
       students: [],
     };
     await addEvent(event);

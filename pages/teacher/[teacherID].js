@@ -1,13 +1,13 @@
 import { useContext } from 'react';
+
 import { UserContext } from "@/lib/context";
 import { getEvents } from '@/lib/firestore_interface';
-
 import TeacherEvents  from '@/components/TeacherEvents';
 
 export async function getServerSideProps({ query }) {
   const { teacherID } = query;
   const events = await getEvents();
-  const teacherEvents = events.filter(event => event.teacherID === teacherID);
+  const teacherEvents = events.filter(event => event.teacherID == teacherID);
   return {
     props: {
       data: teacherEvents

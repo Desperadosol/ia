@@ -6,7 +6,7 @@ import { updateEvent } from "@/lib/firestore_interface";
 
 export async function getServerSideProps({ query }) {
   const event = await getEvent(query.event);
-  const userData = await getUser(event.techerId);
+  const userData = await getUser(event.teacherID);
 
   return {
     props: {
