@@ -74,7 +74,7 @@ function UsernameForm() {
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [teacherPassword, setTeacherPassword] = useState("");
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const { user, username, role } = useContext(UserContext);
 

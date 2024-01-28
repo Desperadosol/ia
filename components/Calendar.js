@@ -49,7 +49,6 @@ const Calendar = ({ events, theme }) => {
         eventClick={handleEventClick}
         eventContent={(eventInfo) => (
           <>
-          {console.log(eventInfo.event)}
             <div className={styles.customEvent}>
               {eventInfo.event.start.toLocaleTimeString([], {
                 hour: "2-digit",

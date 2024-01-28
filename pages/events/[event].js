@@ -21,16 +21,19 @@ export default function EventPage({ eventData, userData }) {
 
   async function handleJoin() {
     if (eventData.students && eventData.students.includes(user.uid)) {
+      // Check if the user has already joined for this event
       alert('You have already joined for this event.');
       return;
     }
 
     if (eventData.students && eventData.students.length >= eventData.maxStudents) {
+      // Check if the event is already full (reached maximum number of students)
       alert('This event is already full.');
       return;
     }
 
     await updateEvent(eventData.id, { students: [...(eventData.students || []), user.uid] });
+    // Add the user to the list of students for this event
     alert('You have successfully joined for this event.');
   }
 
@@ -80,7 +83,7 @@ export default function EventPage({ eventData, userData }) {
       </div>
       { role == "student" ? (
         <div className="text-center mt-5">
-          <button className="btn btn-success btn-lg" onClick={handleJoin}>Join the lesson</button>
+          <button className="btn btn-success btn-lg" onClick={handleJoin}>Join the event</button>
         </div>
       ) : null}
       {/* Here I can put the filesharing, if the user is in the list students */}
