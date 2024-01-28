@@ -1,4 +1,4 @@
-export default function About() {
+export default function About({ theme }) {
   return (
     <div className="container">
       <h1 className="display-1">About</h1>

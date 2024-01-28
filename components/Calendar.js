@@ -29,7 +29,8 @@ const Calendar = ({ events, theme }) => {
         <select className="form-control" id="subjectSelect" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
           <option value="All">All</option>
           <option value="Math">Math</option>
-          {/* Add more options for other subjects here */}
+          <option value="Science">Science</option>
+          <option value="English">English</option>
         </select>
       </div> {/* Here I can add filter by Teacher just next to the filter by subject */}
       <FullCalendar

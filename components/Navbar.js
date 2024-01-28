@@ -66,6 +66,11 @@ export default function Navbar({ theme, setTheme }) {
                   <a className="nav-link active hover-undrln" href={`/teacher/${user.uid}`}>Teacher</a>
               </li>
             )}
+            {role === 'student' && (
+              <li className="nav-item">
+                  <a className="nav-link active hover-undrln" href={`/student/${user.uid}`}>Student</a>
+              </li>
+            )}
           </ul>
           <div className="me-4">
             <button className={`btn me-3 btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>

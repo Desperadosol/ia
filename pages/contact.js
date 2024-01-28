@@ -1,4 +1,4 @@
-export default function Contact() {
+export default function Contact({ theme }) {
     return (
         <div className="container">
             <h1 className="display-1">Contact</h1>
