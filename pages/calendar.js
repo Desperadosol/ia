@@ -3,21 +3,23 @@ import Calendar from "@/components/Calendar";
 import { Modal, Button } from "react-bootstrap";
 import Link from "next/link";
 
-import { getEvents } from "@/lib/firestore_interface";
+import { getEvents, getTeachers } from "@/lib/firestore_interface";
 import EventForm from "@/components/EventForm";
 import AlertCard from "@/components/AlertCard";
 import { UserContext } from "@/lib/context";
 
 export async function getServerSideProps() {
   const events = await getEvents();
+  const teachers = await getTeachers();
   return {
     props: {
       events,
+      teachers
     },
   };
 }
 
-export default function CalendarPage({ events, theme }) {
+export default function CalendarPage({ events, teachers, theme }) {
   const { user, role } = useContext(UserContext);
 
   const [show, setShow] = useState(false);
@@ -45,7 +47,7 @@ export default function CalendarPage({ events, theme }) {
               </Modal>
             </>
           )}
-          <Calendar events={events} theme={theme} />
+          <Calendar events={events} teachers={teachers} theme={theme} />
         </div>
       ) : (
         <AlertCard theme={theme}>

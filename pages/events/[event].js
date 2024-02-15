@@ -1,40 +1,48 @@
 import { getEvent } from "@/lib/firestore_interface";
 import { getUser } from "@/lib/firestore_interface";
-import { useContext } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { UserContext } from "@/lib/context";
 import { updateEvent } from "@/lib/firestore_interface";
+import { uploadFile, deleteFile } from "@/lib/storage_interface"; // Import uploadFile function
+import { arrayUnion, arrayRemove } from "firebase/firestore";
+import Spinner from "@/components/Spinner";
 
 export async function getServerSideProps({ query }) {
   const event = await getEvent(query.event);
-  const userData = await getUser(event.teacherID);
+  const teacherData = await getUser(event.teacherID);
 
   return {
     props: {
       eventData: event,
-      userData: userData,
+      teacherData: teacherData,
     },
   };
 }
 
-export default function EventPage({ eventData, userData }) {
+export default function EventPage({ eventData, teacherData }) {
   const { user, role } = useContext(UserContext);
 
   async function handleJoin() {
     if (eventData.students && eventData.students.includes(user.uid)) {
       // Check if the user has already joined for this event
-      alert('You have already joined for this event.');
+      alert("You have already joined for this event.");
       return;
     }
 
-    if (eventData.students && eventData.students.length >= eventData.maxStudents) {
+    if (
+      eventData.students &&
+      eventData.students.length >= eventData.maxStudents
+    ) {
       // Check if the event is already full (reached maximum number of students)
-      alert('This event is already full.');
+      alert("This event is already full.");
       return;
     }
 
-    await updateEvent(eventData.id, { students: [...(eventData.students || []), user.uid] });
+    await updateEvent(eventData.id, {
+      students: [...(eventData.students || []), user.uid],
+    });
     // Add the user to the list of students for this event
-    alert('You have successfully joined for this event.');
+    alert("You have successfully joined for this event.");
   }
 
   return (
@@ -77,16 +85,111 @@ export default function EventPage({ eventData, userData }) {
           <h5>Teacher Details</h5>
         </div>
         <div className="card-body">
-          <h5 className="card-title">{userData.displayName}</h5>
-          <p className="card-text">E-mail: {userData.email}</p>
+          <h5 className="card-title">{teacherData.displayName}</h5>
+          <p className="card-text">E-mail: {teacherData.email}</p>
         </div>
       </div>
-      { role == "student" ? (
+      {role == "student" ? (
         <div className="text-center mt-5">
-          <button className="btn btn-success btn-lg" onClick={handleJoin}>Join the event</button>
+          <button className="btn btn-success btn-lg" onClick={handleJoin}>
+            Join the event
+          </button>
         </div>
       ) : null}
-      {/* Here I can put the filesharing, if the user is in the list students */}
+
+      <FilesSection role={role} eventData={eventData} />
     </div>
+  );
+}
+
+function FilesSection({ role, eventData }) {
+  const [file, setFile] = useState(null); // State to hold the selected file
+  const [eventFiles, setEventFiles] = useState(eventData.files || []); // State to hold the event files
+  const [loading, setLoading] = useState(false); // State to hold the loading status
+  const fileInputRef = useRef(); // Ref to hold the file input element
+
+  useEffect(() => {
+    setEventFiles(eventData.files);
+  }, [eventData.files]);
+
+  async function handleFileUpload(event) {
+    const file = event.target.files[0];
+    setFile(file);
+  }
+
+  async function handleFileDelete(file) {
+    const path = `events/${eventData.id}/${file.name}`;
+    
+    // Delete the file from Firebase Storage
+    await deleteFile(path)
+    .catch((error) => {
+      console.error('Error deleting file from Firebase Storage:', error);
+    });
+    
+    // Delete the file from Firestore
+    await updateEvent(eventData.id, { files: arrayRemove(file) });
+    setEventFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
+  }
+
+  async function handleFileSubmit() {
+    if (!file) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    setLoading(true); // Start loading
+
+    const path = `events/${eventData.id}/${file.name}`;
+    const downloadURL = await uploadFile(path, file);
+    const newFile = { name: file.name, url: downloadURL };
+    await updateEvent(eventData.id, {
+      files: arrayUnion({ name: file.name, url: downloadURL }),
+    });
+
+    // Clear the file input and the file state
+    fileInputRef.current.value = "";
+    setFile(null);
+
+    setEventFiles((prevFiles) => [...prevFiles, newFile]);
+
+    setLoading(false); // End loading
+  }
+
+  return (
+    <section>
+      <div className="container mt-5">
+        {role == "teacher" && (
+          <div className="text-center mt-5 d-flex">
+            <input type="file" ref={fileInputRef} onChange={handleFileUpload} />
+            <button
+              className="btn btn-light position-relative"
+              onClick={handleFileSubmit}
+              disabled={loading}
+              style={{minWidth: "100px"}}
+            >
+              {loading ? <Spinner /> : 'Upload File'}
+            </button>
+          </div>
+        )}
+        {eventFiles &&
+          eventFiles.map((file) => (
+            <div key={file.name} className="card mt-3">
+              <div className="card-body">
+                <a href={file.url} download={file.name} target="_blank">
+                  {file.name}
+                </a>
+                {role == "teacher" && (
+                  <button
+                    className="btn btn-danger btn-sm float-end"
+                    onClick={() => handleFileDelete(file)}
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+      </div>
+    </section>
   );
 }

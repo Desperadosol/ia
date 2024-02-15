@@ -4,7 +4,7 @@ import { UserContext } from "@/lib/context";
 import { addMinutes } from '@/lib/utils';
 
 function EventForm({ handleClose }) {
-  const { user, role } = useContext(UserContext);
+  const { user, username, role } = useContext(UserContext);
 
   const [title, setTitle] = useState('');
   const [subject, setSubject] = useState('');
@@ -26,6 +26,7 @@ function EventForm({ handleClose }) {
       minStudents,
       maxStudents,
       teacherID: user.uid,
+      teacherUsername: username,
       students: [],
     };
     await addEvent(event);

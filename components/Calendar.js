@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import bootstrap5Plugin from "@fullcalendar/bootstrap5";
-import { addWeeks, startOfWeek, endOfWeek } from "date-fns";
 
 import React, { useState } from "react";
 import { useRouter } from "next/router";
@@ -9,30 +8,61 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import styles from "@/styles/Calendar.module.css"; // Import your CSS module
 
-const Calendar = ({ events, theme }) => {
+const Calendar = ({ events, teachers, theme }) => {
   const router = useRouter();
-  const [selectedSubject, setSelectedSubject] = useState('All');
+  const [selectedSubject, setSelectedSubject] = useState("All");
+  const [selectedTeacher, setSelectedTeacher] = useState("All");
 
   const handleEventClick = (eventInfo) => {
     const eventId = eventInfo.event.id;
-   router.push(`/events/${eventId}`);
+    router.push(`/events/${eventId}`);
   };
 
-  const filteredEvents = selectedSubject === 'All'
-    ? events
-    : events.filter(event => event.subject === selectedSubject);
-  
+  const filteredEvents = events
+    .filter(
+      (event) => selectedSubject === "All" || event.subject === selectedSubject
+    )
+    .filter(
+      (event) =>
+        selectedTeacher === "All" || event.teacherUsername === selectedTeacher
+    );
+
   return (
     <div className={styles.calendarContainer}>
-      <div className="form-group mb-5" style={{maxWidth: "600px"}}>
-        <label htmlFor="subjectSelect">Filter by subject:</label>
-        <select className="form-control" id="subjectSelect" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
-          <option value="All">All</option>
-          <option value="Math">Math</option>
-          <option value="Science">Science</option>
-          <option value="English">English</option>
-        </select>
-      </div> {/* Here I can add filter by Teacher just next to the filter by subject */}
+      <div className="row">
+        <div className="col-md-6">
+          <div className="form-group mb-5" style={{ maxWidth: "600px" }}>
+            <label htmlFor="subjectSelect">Filter by subject:</label>
+            <select
+              className="form-control"
+              id="subjectSelect"
+              value={selectedSubject}
+              onChange={(e) => setSelectedSubject(e.target.value)}
+            >
+              <option value="All">All</option>
+              <option value="Math">Math</option>
+              <option value="Science">Science</option>
+              <option value="English">English</option>
+            </select>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="form-group mb-5" style={{ maxWidth: "600px" }}>
+            <label htmlFor="teacherSelect">Filter by teacher:</label>
+            <select
+              className="form-control"
+              id="teacherSelect"
+              value={selectedTeacher}
+              onChange={(e) => setSelectedTeacher(e.target.value)}
+            >
+              <option value="All">All</option>
+              {teachers.map((teacher) => (
+                <option value={teacher.username}>{teacher.displayName}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
       <FullCalendar
         navLinks={true}
         fixedWeekCount={false}
@@ -61,7 +91,7 @@ const Calendar = ({ events, theme }) => {
               })}
               <br />
               {eventInfo.event.extendedProps.subject}
-              <br/>
+              <br />
               {`"${eventInfo.event.title}"`}
             </div>
           </>
