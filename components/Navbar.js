@@ -1,6 +1,7 @@
 import { UserContext } from "@/lib/context";
 import { useContext } from 'react';
 import Link from 'next/link';
+import Image from "next/image";
 import  { auth } from '@/lib/firebase';
 
 export default function Navbar({ theme, setTheme }) {
@@ -75,8 +76,8 @@ export default function Navbar({ theme, setTheme }) {
           <div className="me-4">
             <button className={`btn me-3 btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>
               {theme == 'dark' ? 
-              <img src="moon.png" alt="" width="24" height="24"/> :
-              <img src="sun-512.png" alt="" width="24" height="24"/>
+              <Image src="/moon.png" alt="" width="24" height="24"/> :
+              <Image src="/sun-512.png" alt="" width="24" height="24"/>
               }
             </button>
             {user? 

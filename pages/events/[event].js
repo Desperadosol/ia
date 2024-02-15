@@ -9,6 +9,11 @@ import Spinner from "@/components/Spinner";
 
 export async function getServerSideProps({ query }) {
   const event = await getEvent(query.event);
+  if (!event) {
+    return {
+      notFound: true,
+    };
+  }
   const teacherData = await getUser(event.teacherID);
 
   return {
@@ -21,7 +26,7 @@ export async function getServerSideProps({ query }) {
 
 export default function EventPage({ eventData, teacherData }) {
   const { user, role } = useContext(UserContext);
-
+  
   async function handleJoin() {
     if (eventData.students && eventData.students.includes(user.uid)) {
       // Check if the user has already joined for this event
@@ -97,12 +102,24 @@ export default function EventPage({ eventData, teacherData }) {
         </div>
       ) : null}
 
-      <FilesSection role={role} eventData={eventData} />
+      {user && eventData.students && eventData.students.includes(user.uid) && eventData.googleMeetLink ? (
+        <div className="text-center mt-5">
+          <button className="btn btn-success btn-lg" onClick={() => window.open(eventData.googleMeetLink, "_blank")}>
+            Join the meeting
+          </button>
+        </div>
+      ) : null}
+
+      {role != "student" && user && user.uid == eventData.teacherID &&(
+        <GoogleMeet user={user} eventData={eventData}/>
+      )}
+
+      <FilesSection user={user} role={role} eventData={eventData} />
     </div>
   );
 }
 
-function FilesSection({ role, eventData }) {
+function FilesSection({ user, role, eventData }) {
   const [file, setFile] = useState(null); // State to hold the selected file
   const [eventFiles, setEventFiles] = useState(eventData.files || []); // State to hold the event files
   const [loading, setLoading] = useState(false); // State to hold the loading status
@@ -125,7 +142,7 @@ function FilesSection({ role, eventData }) {
     .catch((error) => {
       console.error('Error deleting file from Firebase Storage:', error);
     });
-    
+
     // Delete the file from Firestore
     await updateEvent(eventData.id, { files: arrayRemove(file) });
     setEventFiles((prevFiles) => prevFiles.filter((f) => f.name !== file.name));
@@ -158,27 +175,31 @@ function FilesSection({ role, eventData }) {
   return (
     <section>
       <div className="container mt-5">
-        {role == "teacher" && (
-          <div className="text-center mt-5 d-flex">
-            <input type="file" ref={fileInputRef} onChange={handleFileUpload} />
-            <button
-              className="btn btn-light position-relative"
-              onClick={handleFileSubmit}
-              disabled={loading}
-              style={{minWidth: "100px"}}
-            >
-              {loading ? <Spinner /> : 'Upload File'}
-            </button>
+        {user && user.uid == eventData.teacherID && (
+          <div className="row">
+            <div className="col-md-6 my-2">
+              <input className="form-control" type="file" ref={fileInputRef} onChange={handleFileUpload} />
+            </div>
+            <div className="col-md-6 my-2">
+              <button
+                className="btn btn-light position-relative"
+                onClick={handleFileSubmit}
+                disabled={loading}
+                style={{minWidth: "100px"}}
+              >
+                {loading ? <Spinner /> : 'Upload File'}
+              </button>
+            </div>
           </div>
         )}
-        {eventFiles &&
+        {(user && ((user.uid == eventData.teacherID) || (eventData.students.includes(user.uid)))) && eventFiles &&
           eventFiles.map((file) => (
             <div key={file.name} className="card mt-3">
               <div className="card-body">
                 <a href={file.url} download={file.name} target="_blank">
                   {file.name}
                 </a>
-                {role == "teacher" && (
+                {user && user.uid == eventData.teacherID && (
                   <button
                     className="btn btn-danger btn-sm float-end"
                     onClick={() => handleFileDelete(file)}
@@ -191,5 +212,28 @@ function FilesSection({ role, eventData }) {
           ))}
       </div>
     </section>
+  );
+}
+
+function GoogleMeet({ user, eventData }) {
+  const [googleMeetLink, setGoogleMeetLink] = useState(eventData.googleMeetLink || ""); // State to hold the Google Meet link
+  
+  async function handleGoogleMeetLinkSave() {
+    if (!googleMeetLink) {
+      alert("Please enter a Google Meet link.");
+      return;
+    }
+
+    await updateEvent(eventData.id, { googleMeetLink });
+    alert("Google Meet link saved successfully.");
+  }
+
+  return (
+    <div className="input-group mt-5 ">
+      <input type="text" className="form-control" style={{ maxWidth: "300px" }} value={googleMeetLink} onChange={(e) => setGoogleMeetLink(e.target.value)} placeholder="Enter Google Meet link" />
+      <button className="btn btn-outline-primary position-relative" onClick={handleGoogleMeetLinkSave}>
+        Save Google Meet link
+      </button>
+    </div>
   );
 }
