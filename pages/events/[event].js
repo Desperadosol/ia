@@ -104,8 +104,9 @@ export default function EventPage({ eventData, teacherData }) {
 
       {user && eventData.students && eventData.students.includes(user.uid) && eventData.googleMeetLink ? (
         <div className="text-center mt-5">
-          <button className="btn btn-success btn-lg" onClick={() => window.open(eventData.googleMeetLink, "_blank")}>
+          <button className="btn btn-light btn-lg d-flex align-items-center" onClick={() => window.open(eventData.googleMeetLink, "_blank")}>
             Join the meeting
+            <img src="/googlemeet.png" style={{ maxWidth: "32px", maxHeight: "32px", marginLeft: "4px" }}/>
           </button>
         </div>
       ) : null}
