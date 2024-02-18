@@ -14,7 +14,7 @@ export async function getServerSideProps() {
   return {
     props: {
       events,
-      teachers
+      teachers,
     },
   };
 }
@@ -31,28 +31,31 @@ export default function CalendarPage({ events, teachers, theme }) {
     <>
       {user ? (
         <div>
-          <h1>Calendar</h1>
-          {role == "teacher" && (
-            <>
-              <Button variant="primary" onClick={handleShow}>
-                Add Event
-              </Button>
-              <Modal show={show} onHide={handleClose} style={{ padding: 0 }}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Add Lesson</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <EventForm handleClose={handleClose} />
-                </Modal.Body>
-              </Modal>
-            </>
-          )}
+          <div className="text-center mt-5">
+            {role == "teacher" && (
+              <div>
+                <Button variant="primary" className="btn-lg" onClick={handleShow}>
+                  Add Event
+                </Button>
+                <Modal show={show} onHide={handleClose} style={{ padding: 0 }}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Add Lesson</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <EventForm handleClose={handleClose} />
+                  </Modal.Body>
+                </Modal>
+              </div>
+            )}
+          </div>
           <Calendar events={events} teachers={teachers} theme={theme} />
         </div>
       ) : (
         <AlertCard theme={theme}>
           <h1>Calendar</h1>
-          <Link href="/enter" className="fs-5">Log in to access this page &rarr;</Link>
+          <Link href="/enter" className="fs-5">
+            Log in to access this page &rarr;
+          </Link>
         </AlertCard>
       )}
     </>
