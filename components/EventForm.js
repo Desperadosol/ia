@@ -11,7 +11,6 @@ function EventForm({ handleClose }) {
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [price, setPrice] = useState('');
   const [minStudents, setMinStudents] = useState(1);
   const [maxStudents, setMaxStudents] = useState(1);
 
@@ -22,7 +21,6 @@ function EventForm({ handleClose }) {
       subject,
       start: `${date}T${startTime}:00`, 
       end: `${date}T${endTime}:00` ,
-      price,
       minStudents,
       maxStudents,
       teacherID: user.uid,
@@ -35,7 +33,6 @@ function EventForm({ handleClose }) {
     setDate('');
     setStartTime('');
     setEndTime('');
-    setPrice('');
     handleClose();
   };
 
@@ -74,10 +71,6 @@ function EventForm({ handleClose }) {
       <div className="mb-3 mx-3">
         <label htmlFor="maxStudents" className="form-label">Max Students:</label>
         <input type="number" id="maxStudents" className="form-control" min="1" value={maxStudents} onChange={(e) => setMaxStudents(e.target.value)} required />
-      </div>
-      <div className="mb-3 mx-3">
-        <label htmlFor="price" className="form-label">Price (USD):</label>
-        <input type="number" id="price" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} required />
       </div>
       <div className='w-100 text-center'>
         <button type="submit" className="btn btn-primary mt-2">Add Event</button>

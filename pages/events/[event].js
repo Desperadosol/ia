@@ -71,13 +71,6 @@ export default function EventPage({ eventData, teacherData }) {
               End Time:{" "}
               {new Date(eventData.end).toLocaleString().split(", ")[1]}
             </li>
-            <li className="list-group-item">Price: ${eventData.price}</li>
-            <li className="list-group-item">
-              Minimum Students: {eventData.minStudents}
-            </li>
-            <li className="list-group-item">
-              Maximum Students: {eventData.maxStudents}
-            </li>
             <li className="list-group-item">
               Students Applied:{" "}
               {eventData.students == null ? 0 : eventData.students.length}
