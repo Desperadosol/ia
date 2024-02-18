@@ -28,9 +28,8 @@ export default function Student(props) {
   }
 
   return (
-    <div>
-        <h1>Student Panel</h1>
-        <StudentEvents events={props.data} />
+    <div className='w-100 vh-100 py-5' style={{backgroundColor: "var(--primary)"}}>
+      <StudentEvents events={props.data} />
     </div>
   );
 }

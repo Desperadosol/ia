@@ -35,7 +35,7 @@ export default function Enter({ theme }) {
       ) : (
         <AlertCard theme={theme}>
           <div className="text-center mb-2">
-            <h5 className="card-title fs-3">Log in to "Smth"</h5>
+            <h5 className="card-title fs-3">Log in to our website</h5>
           </div>
           <SignInButton theme={theme}/>
         </AlertCard>

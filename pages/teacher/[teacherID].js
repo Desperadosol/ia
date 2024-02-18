@@ -28,8 +28,7 @@ export default function Teacher(props) {
   }
 
   return (
-    <div>
-      <h1>Teacher Panel</h1>
+    <div className='w-100 vh-100 py-5' style={{backgroundColor: "var(--primary)"}}>
       <TeacherEvents events={props.data} />
     </div>
   );

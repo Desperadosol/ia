@@ -20,12 +20,12 @@ const ContactPage = () => {
   return (
     <section className="vh-100 d-flex justify-content-center align-items-center" style={{backgroundColor: "var(--primary)"}}>
     <div className="container bg-dark p-5" style={{maxWidth: "80%", borderRadius: "18px"}}>
-      <h1 className="text-center mb-5 display-4">Contact Us</h1>
+      <h1 className="text-center mb-5 display-4 text-white">Contact Us</h1>
       <div className="row mt-4">
         {staff.map((staffMember, index) => (
           <div key={index} className="col-md-6 mb-4">
             <div className="d-flex justify-content-center" >
-              <div className="card text-center" >
+              <div className="card bg-dark text-white text-center" >
                 <img
                   className="card-img-top"
                   src={staffMember.photo}
