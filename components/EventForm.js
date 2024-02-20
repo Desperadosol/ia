@@ -34,6 +34,7 @@ function EventForm({ handleClose }) {
     setStartTime('');
     setEndTime('');
     handleClose();
+    window.location.reload()
   };
 
   return (
