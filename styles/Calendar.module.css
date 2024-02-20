@@ -6,13 +6,28 @@
   z-index: auto;
   width: 100%;
   cursor: pointer;
-  background-color: #84c5e6;
-  color: #074b85;
   padding: 5px;
   border-radius: 8px;
-  border: 2px solid #074b85;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.eventBlue {
+  background-color: #84c5e6;
+  color: #074b85;
+  border: 2px solid #074b85;
+}
+
+.eventGreen {
+  background-color: #84e699;
+  color: #078516;
+  border: 2px solid #078516;
+}
+
+.eventRed {
+  background-color: #e69184;
+  color: #851c07;
+  border: 2px solid #851c07;
 }
 

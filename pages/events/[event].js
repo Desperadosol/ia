@@ -6,6 +6,7 @@ import { updateEvent } from "@/lib/firestore_interface";
 import { uploadFile, deleteFile } from "@/lib/storage_interface"; // Import uploadFile function
 import { arrayUnion, arrayRemove } from "firebase/firestore";
 import Spinner from "@/components/Spinner";
+import GoogleMeet from "@/components/GoogleMeet";
 
 export async function getServerSideProps({ query }) {
   const event = await getEvent(query.event);
@@ -72,8 +73,16 @@ export default function EventPage({ eventData, teacherData }) {
               {new Date(eventData.end).toLocaleString().split(", ")[1]}
             </li>
             <li className="list-group-item">
-              Students Applied:{" "}
+              Students Joined:{" "}
               {eventData.students == null ? 0 : eventData.students.length}
+            </li>
+            <li className="list-group-item">
+              Minimum:{" "}
+              {eventData.minStudents}
+            </li>
+            <li className="list-group-item">
+              Maximum:{" "}
+              {eventData.maxStudents}
             </li>
           </ul>
         </div>
@@ -87,7 +96,7 @@ export default function EventPage({ eventData, teacherData }) {
           <p className="card-text">E-mail: {teacherData.email}</p>
         </div>
       </div>
-      {role == "student" ? (
+      {role == "student" || role == "teacher" ? (
         <div className="text-center mt-5">
           <button className="btn btn-success btn-lg" onClick={handleJoin}>
             Join the event
@@ -161,14 +170,14 @@ function FilesSection({ user, role, eventData }) {
     fileInputRef.current.value = "";
     setFile(null);
 
-    setEventFiles((prevFiles) => [...prevFiles, newFile]);
+    setEventFiles((prevFiles) => [...(prevFiles || []), newFile]);
 
     setLoading(false); // End loading
   }
 
   return (
     <section>
-      <div className="container mt-5">
+      <div className="container mt-5 p-0">
         {user && user.uid == eventData.teacherID && (
           <div className="row">
             <div className="col-md-6 my-2">
@@ -206,28 +215,5 @@ function FilesSection({ user, role, eventData }) {
           ))}
       </div>
     </section>
-  );
-}
-
-function GoogleMeet({ user, eventData }) {
-  const [googleMeetLink, setGoogleMeetLink] = useState(eventData.googleMeetLink || ""); // State to hold the Google Meet link
-  
-  async function handleGoogleMeetLinkSave() {
-    if (!googleMeetLink) {
-      alert("Please enter a Google Meet link.");
-      return;
-    }
-
-    await updateEvent(eventData.id, { googleMeetLink });
-    alert("Google Meet link saved successfully.");
-  }
-
-  return (
-    <div className="input-group mt-5 ">
-      <input type="text" className="form-control" style={{ maxWidth: "300px" }} value={googleMeetLink} onChange={(e) => setGoogleMeetLink(e.target.value)} placeholder="Enter Google Meet link" />
-      <button className="btn btn-outline-primary position-relative" onClick={handleGoogleMeetLinkSave}>
-        Save Google Meet link
-      </button>
-    </div>
   );
 }

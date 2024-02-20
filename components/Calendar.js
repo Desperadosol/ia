@@ -79,7 +79,7 @@ const Calendar = ({ events, teachers, theme }) => {
         eventClick={handleEventClick}
         eventContent={(eventInfo) => (
           <>
-            <div className={styles.customEvent}>
+            <div className={`${styles.customEvent} ${eventInfo.event.extendedProps.students.length == eventInfo.event.extendedProps.maxStudents ? styles.eventRed : eventInfo.event.extendedProps.students.length >= eventInfo.event.extendedProps.minStudents ? styles.eventGreen : styles.eventBlue}`}>
               {eventInfo.event.start.toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
