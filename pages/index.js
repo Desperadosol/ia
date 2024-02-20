@@ -37,6 +37,11 @@ export default function Home() {
             Teacher Panel
           </Link>
         )}
+        {!user && (
+          <Link href="/enter">
+            <button className="btn btn-light btn-lg">Log in</button>
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -7,6 +7,8 @@ import { uploadFile, deleteFile } from "@/lib/storage_interface"; // Import uplo
 import { arrayUnion, arrayRemove } from "firebase/firestore";
 import Spinner from "@/components/Spinner";
 import GoogleMeet from "@/components/GoogleMeet";
+import { doc, onSnapshot } from "firebase/firestore";
+import { firestore } from "@/lib/firebase";
 
 export async function getServerSideProps({ query }) {
   const event = await getEvent(query.event);
@@ -19,14 +21,30 @@ export async function getServerSideProps({ query }) {
 
   return {
     props: {
-      eventData: event,
-      teacherData: teacherData,
+      initialEventData: event,
+      initialTeacherData: teacherData,
     },
   };
 }
 
-export default function EventPage({ eventData, teacherData }) {
+export default function EventPage({ initialEventData, initialTeacherData }) {
   const { user, role } = useContext(UserContext);
+
+  const [eventData, setEventData] = useState(initialEventData);
+  const [teacherData, setTeacherData] = useState(initialTeacherData);
+
+  useEffect(() => {
+    const eventRef = doc(firestore, 'events', eventData.id);
+    const unsubscribeEvent = onSnapshot(eventRef, (doc) => {
+      if (doc.exists()) {
+        setEventData(doc.data()); 
+        // Clean up teacher subscription on unmount or when event changes
+        return () => unsubscribeTeacher();
+      }
+    });
+    // Clean up event subscription on unmount
+    return () => unsubscribeEvent();
+  }, [eventData, teacherData]);
   
   async function handleJoin() {
     if (eventData.students && eventData.students.includes(user.uid)) {

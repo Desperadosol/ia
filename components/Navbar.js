@@ -1,12 +1,12 @@
 import { UserContext } from "@/lib/context";
-import { useContext } from 'react';
-import Link from 'next/link';
+import { useContext } from "react";
+import Link from "next/link";
 import Image from "next/image";
-import  { auth } from '@/lib/firebase';
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/router";
 
 export default function Navbar({ theme, setTheme }) {
-  const { user, role } = useContext(UserContext);
-  
+  const { user, username, role } = useContext(UserContext);
 
   const toggleTheme = () => {
     if (theme === "light") {
@@ -38,7 +38,11 @@ export default function Navbar({ theme, setTheme }) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active hover-undrln" aria-current="page" href="/">
+              <a
+                className="nav-link active hover-undrln"
+                aria-current="page"
+                href="/"
+              >
                 Home
               </a>
             </li>
@@ -52,64 +56,97 @@ export default function Navbar({ theme, setTheme }) {
                 About
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link active hover-undrln" href="/calendar">
-                Calendar
-              </a>
-            </li>
-            {role === 'admin' && (
+            {user && username && (
               <li className="nav-item">
-                  <a className="nav-link active hover-undrln" href="/admin">Admin</a>
+                <a className="nav-link active hover-undrln" href="/calendar">
+                  Calendar
+                </a>
               </li>
             )}
-            {role === 'teacher' && (
+            {user && username && role === "admin" && (
               <li className="nav-item">
-                  <a className="nav-link active hover-undrln" href={`/teacher/${user.uid}`}>Teacher</a>
+                <a className="nav-link active hover-undrln" href="/admin">
+                  Admin
+                </a>
               </li>
             )}
-            {role === 'student' && (
+            {user && username && role === "teacher" && (
               <li className="nav-item">
-                  <a className="nav-link active hover-undrln" href={`/student/${user.uid}`}>Student</a>
+                <a
+                  className="nav-link active hover-undrln"
+                  href={`/teacher/${user.uid}`}
+                >
+                  Teacher
+                </a>
+              </li>
+            )}
+            {user && username && role === "student" && (
+              <li className="nav-item">
+                <a
+                  className="nav-link active hover-undrln"
+                  href={`/student/${user.uid}`}
+                >
+                  Student
+                </a>
               </li>
             )}
           </ul>
           <div className="me-4">
-            <button className={`btn me-3 btn-${theme == 'dark' ? 'light' : 'dark'}`} onClick={toggleTheme} style={{paddingTop: "3.6px"}}>
-              {theme == 'dark' ? 
-              <Image src="/moon.png" alt="" width="24" height="24"/> :
-              <Image src="/sun-512.png" alt="" width="24" height="24"/>
-              }
+            <button
+              className={`btn me-3 btn-${theme == "dark" ? "light" : "dark"}`}
+              onClick={toggleTheme}
+              style={{ paddingTop: "3.6px" }}
+            >
+              {theme == "dark" ? (
+                <Image src="/moon.png" alt="" width="24" height="24" />
+              ) : (
+                <Image src="/sun-512.png" alt="" width="24" height="24" />
+              )}
             </button>
-            {user? 
-            <SignOutButton theme={theme}/> :
-            <Link href="/enter">
-              <button className="btn fw-semibold log-in-btn">Log in</button>
-            </Link>
-            }
+            {user ? (
+              <SignOutButton theme={theme} />
+            ) : (
+              <Link href="/enter">
+                <button className="btn fw-semibold log-in-btn">Log in</button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
       <style jsx>{`
-            .log-in-btn {
-                color: var(--primary);
-                border: 2px solid var(--primary);
-            }
+        .log-in-btn {
+          color: var(--primary);
+          border: 2px solid var(--primary);
+        }
 
-            .log-in-btn:hover {
-                color: white;
-                background-color: var(--primary);
-            }
-            
-            .hover-undrln:hover {
-                text-decoration: underline;
-                text-decoration-thickness: 2px;
-                text-underline-offset: 3px;
-            }
+        .log-in-btn:hover {
+          color: white;
+          background-color: var(--primary);
+        }
+
+        .hover-undrln:hover {
+          text-decoration: underline;
+          text-decoration-thickness: 2px;
+          text-underline-offset: 3px;
+        }
       `}</style>
     </nav>
   );
-};
+}
 
 function SignOutButton({ theme }) {
-  return <button className={`btn btn-outline-${theme == "dark" ? "light" : "dark"}`} onClick={() => auth.signOut()}>Sign Out</button>
+  const router = useRouter();
+  const logout = () => {
+    auth.signOut();
+    router.push("/");
+  };
+
+  return (
+    <button
+      className={`btn btn-outline-${theme == "dark" ? "light" : "dark"}`}
+      onClick={logout}
+    >
+      Sign Out
+    </button>
+  );
 }

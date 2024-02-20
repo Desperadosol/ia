@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import Calendar from "@/components/Calendar";
 import { Modal, Button } from "react-bootstrap";
-import Link from "next/link";
+
 
 import { getEvents, getTeachers } from "@/lib/firestore_interface";
 import EventForm from "@/components/EventForm";
-import AlertCard from "@/components/AlertCard";
 import { UserContext } from "@/lib/context";
+import Loader from "@/components/Loader";
 
 export async function getServerSideProps() {
   const events = await getEvents();
@@ -20,7 +20,7 @@ export async function getServerSideProps() {
 }
 
 export default function CalendarPage({ events, teachers, theme }) {
-  const { user, role } = useContext(UserContext);
+  const { user, username, role } = useContext(UserContext);
 
   const [show, setShow] = useState(false);
 
@@ -29,7 +29,7 @@ export default function CalendarPage({ events, teachers, theme }) {
 
   return (
     <>
-      {user ? (
+      {username ? (
         <div>
           <div className="text-center mt-5">
             {role == "teacher" && (
@@ -51,12 +51,7 @@ export default function CalendarPage({ events, teachers, theme }) {
           <Calendar events={events} teachers={teachers} theme={theme} />
         </div>
       ) : (
-        <AlertCard theme={theme}>
-          <h1>Calendar</h1>
-          <Link href="/enter" className="fs-5">
-            Log in to access this page &rarr;
-          </Link>
-        </AlertCard>
+        <Loader show={true}/>
       )}
     </>
   );

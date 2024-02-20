@@ -10,6 +10,7 @@ import {
 import { UserContext } from "@/lib/context";
 import { generatePassword } from "@/lib/utils";
 import AlertCard from "@/components/AlertCard";
+import { useRouter } from 'next/router' 
 
 export default function Enter({ theme }) {
   const { user, username } = useContext(UserContext);
@@ -46,8 +47,10 @@ export default function Enter({ theme }) {
 
 //sign in with google button
 function SignInButton({ theme }) {
+  const router = useRouter()
   const signInWithGoogle = async () => {
     await auth.signInWithPopup(googleAuthProvider);
+    router.push('/')
   };
 
   return (
