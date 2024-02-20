@@ -70,7 +70,7 @@ function EventForm({ handleClose }) {
       </div>
       <div className="mb-3 mx-3">
         <label htmlFor="maxStudents" className="form-label">Max Students:</label>
-        <input type="number" id="maxStudents" className="form-control" min={minStudents.parseInt()+1} value={maxStudents} onChange={(e) => setMaxStudents(e.target.value)} required />
+        <input type="number" id="maxStudents" className="form-control" min={(parseInt(minStudents)+1).toString()} value={maxStudents} onChange={(e) => setMaxStudents(e.target.value)} required />
       </div>
       <div className='w-100 text-center'>
         <button type="submit" className="btn btn-primary mt-2">Add Event</button>
