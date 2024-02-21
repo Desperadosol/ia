@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { UserContext } from "@/lib/context";
 import { getEvents } from '@/lib/firestore_interface';
 import StudentEvents  from '@/components/StudentEvents';
+import Loader from '@/components/Loader';
 
 export async function getServerSideProps({ query }) {
   const { studentID } = query;
@@ -10,26 +11,26 @@ export async function getServerSideProps({ query }) {
   const studentEvents = events.filter(event => event.students.includes(studentID));
   return {
     props: {
-      data: studentEvents
+      studentEvents
     }
   }
 }
 
 
 export default function Student(props) {
-  const { user, role } = useContext(UserContext);
-
-  if (!user) {
-    return <p>Please log in to view this page.</p>;
-  }
-
-  if (role !== 'student') {
-    return <p>You do not have permission to view this page.</p>;
-  }
+  const { user, username, role } = useContext(UserContext);
 
   return (
-    <div className='w-100 vh-100 py-5' style={{backgroundColor: "var(--primary)"}}>
-      <StudentEvents events={props.data} />
-    </div>
+    <section>
+    {user && username ? (
+    <div
+      className="w-100 py-5"
+      style={{ background: "var(--grad2)", minHeight: "100vh" }}
+    >
+      <StudentEvents events={props.studentEvents} />
+    </div>) : (
+      <Loader show/>
+    )}
+  </section>
   );
 }

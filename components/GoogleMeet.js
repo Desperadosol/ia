@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { updateEvent } from "@/lib/firestore_interface";
+import toast from "react-hot-toast";
 
 export default function GoogleMeet({ user, eventData }) {
   const [googleMeetLink, setGoogleMeetLink] = useState(
@@ -8,12 +9,13 @@ export default function GoogleMeet({ user, eventData }) {
   const [loading, setLoading] = useState(null);
   async function handleGoogleMeetLinkSave() {
     if (!googleMeetLink) {
-      alert("Please enter a Google Meet link.");
+      toast.error("Please enter a Google Meet link.");
       return;
     }
     setLoading(true);
     await updateEvent(eventData.id, { googleMeetLink });
     setLoading(null);
+    toast.success("Google Meet link saved successfully");
   }
 
   return (

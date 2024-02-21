@@ -70,6 +70,16 @@ export default function Navbar({ theme, setTheme }) {
                 </a>
               </li>
             )}
+            {user && username && (role == "student" || role == "teacher") && (
+              <li className="nav-item">
+                <a
+                  className="nav-link active hover-undrln"
+                  href={`/student/${user.uid}`}
+                >
+                  My Events
+                </a>
+              </li>
+            )}
             {user && username && role === "teacher" && (
               <li className="nav-item">
                 <a
@@ -77,16 +87,6 @@ export default function Navbar({ theme, setTheme }) {
                   href={`/teacher/${user.uid}`}
                 >
                   Teacher
-                </a>
-              </li>
-            )}
-            {user && username && role === "student" && (
-              <li className="nav-item">
-                <a
-                  className="nav-link active hover-undrln"
-                  href={`/student/${user.uid}`}
-                >
-                  Student
                 </a>
               </li>
             )}

@@ -1,5 +1,7 @@
 :root {
-  --primary: #058C42;
+  --primary: #058c42;
+  --grad: linear-gradient(155deg, rgba(0,0,0,1) 0%, rgba(5,140,66,1) 25%, rgba(10,189,91,1) 50%, rgba(5,140,66,1) 75%, rgba(0,0,0,1) 100%);
+  --grad2: linear-gradient(155deg, rgba(0,0,0,1) 0%, rgba(5,140,98,1) 25%, rgba(10,189,136,1) 50%, rgba(5,140,98,1) 75%, rgba(0,0,0,1) 100%);
 }
 
 html,

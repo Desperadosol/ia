@@ -5,9 +5,10 @@ import Link from "next/link";
 export default function Home() {
   const { user, username, role } = useContext(UserContext);
   return (
+    <section>  
     <div
       className="vh-100 d-flex pt-5 justify-content-center text-white"
-      style={{ backgroundImage: "url('/back2.jpeg')", backgroundSize: "cover" }}
+      style={{ backgroundImage: "linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(5, 140, 66, 0.6)), url('/back2.jpeg')", backgroundSize: "cover" }}
     >
       <div className="text-center p-5 my-5">
         {username && (
@@ -44,5 +45,7 @@ export default function Home() {
         )}
       </div>
     </div>
+    
+    </section>
   );
 }

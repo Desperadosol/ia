@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback, useContext } from "react";
 import debounce from "lodash.debounce";
-import Link from "next/link";
 
 import { auth, firestore, googleAuthProvider } from "@/lib/firebase";
 import {
@@ -9,62 +8,60 @@ import {
 } from "@/lib/firestore_interface";
 import { UserContext } from "@/lib/context";
 import { generatePassword } from "@/lib/utils";
-import AlertCard from "@/components/AlertCard";
-import { useRouter } from 'next/router' 
+import GradBack from "@/components/GradBack";
+import { useRouter } from "next/router";
 
 export default function Enter({ theme }) {
   const { user, username } = useContext(UserContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user && username) {
+      router.push("/");
+    }
+  }, [user, username]);
 
   return (
     <main>
       {user ? (
         !username ? (
           <UsernameForm />
-        ) : (
-          <AlertCard theme={theme}>
-            <div className="card-body d-flex flex-column justify-content-center align-items-center">
-              <h2 className="card-title mb-3">You are signed in</h2>
-              <Link
-                href="/"
-                className="fs-5 link-underline-white link-offset-1"
-              >
-                Go to the starting page&rarr;
-              </Link>
-            </div>
-          </AlertCard>
-        )
+        ) : null
       ) : (
-        <AlertCard theme={theme}>
+        <GradBack theme={theme}>
           <div className="text-center mb-2">
-            <h5 className="card-title fs-3">Log in to our website</h5>
+            <h5 className="display-2 fw-semibold text-black">
+              Log in to our website
+            </h5>
           </div>
-          <SignInButton theme={theme}/>
-        </AlertCard>
+          <div className="w-100">
+            <SignInButton theme={theme} user={user} username={username} />
+          </div>
+        </GradBack>
       )}
     </main>
   );
 }
 
 //sign in with google button
-function SignInButton({ theme }) {
-  const router = useRouter()
+function SignInButton({ user, username }) {
   const signInWithGoogle = async () => {
     await auth.signInWithPopup(googleAuthProvider);
-    router.push('/')
   };
 
   return (
     <div className="mt-3 d-flex align-items-center justify-content-center">
       <button
-        className={`btn btn-outline-${theme == "dark" ? "light" : "dark"} d-flex align-items-center`}
+        className="btn btn-dark btn-lg d-flex align-items-center fs-3 justify-content-center"
         onClick={signInWithGoogle}
+        style={{ minWidth: "min(500px,100%)" }}
       >
-        Continue with Google
         <img
           src="/google.png"
           alt="Google"
-          style={{ maxWidth: "32px", maxHeight: "32px", marginLeft: "4px" }}
+          style={{ maxWidth: "50px", maxHeight: "50px", marginRight: "8px" }}
         />
+        Continue with Google
       </button>
     </div>
   );
@@ -80,6 +77,7 @@ function UsernameForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const { user, username, role } = useContext(UserContext);
+  const router = useRouter();
 
   useEffect(() => {
     checkUsername(formValue);
@@ -108,6 +106,7 @@ function UsernameForm() {
     batch.set(usernameDoc, { uid: user.uid });
 
     await batch.commit();
+    router.push("/");
   };
 
   const onChange = (e) => {
@@ -156,7 +155,7 @@ function UsernameForm() {
     !username && (
       <section
         className="d-flex justify-content-center align-items-center vh-100"
-        style={{ backgroundColor: "var(--primary)" }}
+        style={{ background: "var(--grad)" }}
       >
         <div className="card" style={{ width: "24rem" }}>
           <div className="card-body">
@@ -186,7 +185,7 @@ function UsernameForm() {
                   data-bs-toggle="buttons"
                 >
                   <label
-                    className={`btn btn-primary ${
+                    className={`btn btn-light ${
                       roleValue === "student" ? "active" : ""
                     }`}
                     htmlFor="student"
@@ -204,7 +203,7 @@ function UsernameForm() {
                     Student
                   </label>
                   <label
-                    className={`btn btn-primary ${
+                    className={`btn btn-light ${
                       roleValue === "teacher" ? "active" : ""
                     }`}
                     htmlFor="teacher"
@@ -225,33 +224,33 @@ function UsernameForm() {
               </div>
               {roleValue === "teacher" && (
                 <div className="form-group mt-3">
-                    <label className="mb-3 h5" htmlFor="teacherPassword">
-                        Teacher Password
-                    </label>
-                    <div className="input-group">
-                        <input
-                            type={isPasswordVisible ? "text" : "password"}
-                            className="form-control"
-                            id="teacherPassword"
-                            placeholder="Password"
-                            value={teacherPassword}
-                            onChange={handleTeacherPasswordChange}
-                        />
-                        <button
-                            type="button"
-                            className="btn btn-outline-secondary"
-                            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                            style={{width: "4.5rem"}}
-                        >
-                            {isPasswordVisible ? "Hide" : "Show"}
-                        </button>
-                    </div>
+                  <label className="mb-3 h5" htmlFor="teacherPassword">
+                    Teacher Password
+                  </label>
+                  <div className="input-group">
+                    <input
+                      type={isPasswordVisible ? "text" : "password"}
+                      className="form-control"
+                      id="teacherPassword"
+                      placeholder="Password"
+                      value={teacherPassword}
+                      onChange={handleTeacherPasswordChange}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                      style={{ width: "4.5rem" }}
+                    >
+                      {isPasswordVisible ? "Hide" : "Show"}
+                    </button>
+                  </div>
                 </div>
               )}
 
               <button
                 type="submit"
-                className="btn btn-primary mt-3"
+                className="btn btn-light mt-3"
                 disabled={
                   !isValid ||
                   (roleValue === "teacher" && !isTeacherPasswordCorrect())
