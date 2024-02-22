@@ -75,6 +75,7 @@ function UsernameForm() {
   const [loading, setLoading] = useState(false);
   const [teacherPassword, setTeacherPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isTeacherPasswordCorrect, setIsTeacherPasswordCorrect] = useState(false);
 
   const { user, username, role } = useContext(UserContext);
   const router = useRouter();
@@ -143,13 +144,11 @@ function UsernameForm() {
     setRoleValue(e.target.value);
   };
 
-  const handleTeacherPasswordChange = (event) => {
+  const handleTeacherPasswordChange = async (event) => {
     setTeacherPassword(event.target.value);
+    setIsTeacherPasswordCorrect(event.target.value === (await getTeacherPassword()));
   };
 
-  const isTeacherPasswordCorrect = async () => {
-    return teacherPassword === (await getTeacherPassword());
-  };
 
   return (
     !username && (
@@ -252,8 +251,7 @@ function UsernameForm() {
                 type="submit"
                 className="btn btn-light mt-3"
                 disabled={
-                  !isValid ||
-                  (roleValue === "teacher" && !isTeacherPasswordCorrect())
+                  !isValid || (roleValue === "teacher" && !isTeacherPasswordCorrect)
                 }
               >
                 Choose
