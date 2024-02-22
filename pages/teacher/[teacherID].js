@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { UserContext } from "@/lib/context";
 import { getEvents } from "@/lib/firestore_interface";
 import TeacherEvents from "@/components/TeacherEvents";
-import StudentEvents from "@/components/StudentEvents";
 import Loader from "@/components/Loader";
 
 export async function getServerSideProps({ query }) {

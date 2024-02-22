@@ -212,7 +212,7 @@ function FilesSection({ user, role, eventData }) {
 
   return (
     <section>
-      <div className="container mt-5 p-0">
+      <div className="container my-5 p-0">
         {user && user.uid == eventData.teacherID && (
           <div className="row">
             <div className="col-md-6 my-2">

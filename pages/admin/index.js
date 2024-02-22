@@ -12,6 +12,12 @@ export default function Admin({ password }) {
   const { user, role } = useContext(UserContext);
   const [isCopied, setIsCopied] = useState(false);
 
+  const handleCopyClick = async () => {
+    await navigator.clipboard.writeText(password);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+  };
+  
   if (!user) {
     return <p>Please log in to view this page.</p>;
   }
@@ -20,11 +26,6 @@ export default function Admin({ password }) {
     return <p>You do not have permission to view this page.</p>;
   }
 
-  const handleCopyClick = async () => {
-    await navigator.clipboard.writeText(password);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
-  };
 
   return (
     <div>

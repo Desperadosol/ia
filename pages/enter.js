@@ -126,7 +126,7 @@ function UsernameForm() {
       setIsValid(false);
     }
   };
-
+  //The function checks whether the username is longer than 3 characters and if the username already exists in the collection “usernames”. 
   const checkUsername = useCallback(
     debounce(async (username) => {
       if (username.length >= 3) {
